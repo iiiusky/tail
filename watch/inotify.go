@@ -8,9 +8,8 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/fsnotify/fsnotify"
 	"github.com/iiiusky/tail/util"
-
-	"gopkg.in/fsnotify/fsnotify.v1"
 	"gopkg.in/tomb.v1"
 )
 
