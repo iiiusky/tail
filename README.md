@@ -1,6 +1,8 @@
 # Go package for tail-ing files
 
-This package is a fork of https://github.com/hpcloud which does not appear to be actively maintained.
+> The original https://github.com/hpcloud/tail does not seem to be maintained, I fork to maintain part of the code
+
+This package is a fork of https://github.com/iiiusky which does not appear to be actively maintained.
 
 A Go package striving to emulate the features of the BSD `tail` program.
 
@@ -11,7 +13,7 @@ for line := range t.Lines {
 }
 ```
 
-See [API documentation](http://godoc.org/github.com/hpcloud/tail).
+See [API documentation](http://godoc.org/github.com/iiiusky/tail).
 
 ## Log rotation
 
@@ -20,4 +22,4 @@ designed to work with log rotation tools.
 
 ## Installing
 
-    go get github.com/tenebris-tech/tail
+    go get github.com/iiiusky/tail

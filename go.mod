@@ -1,4 +1,4 @@
-module github.com/tenebris-tech/tail
+module github.com/iiiusky/tail
 
 go 1.16
 

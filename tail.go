@@ -15,9 +15,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/tenebris-tech/tail/ratelimiter"
-	"github.com/tenebris-tech/tail/util"
-	"github.com/tenebris-tech/tail/watch"
+	"github.com/iiiusky/tail/ratelimiter"
+	"github.com/iiiusky/tail/util"
+	"github.com/iiiusky/tail/watch"
 
 	"gopkg.in/tomb.v1"
 )

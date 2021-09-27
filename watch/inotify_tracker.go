@@ -10,7 +10,7 @@ import (
 	"sync"
 	"syscall"
 
-	"github.com/tenebris-tech/tail/util"
+	"github.com/iiiusky/tail/util"
 
 	"gopkg.in/fsnotify/fsnotify.v1"
 )

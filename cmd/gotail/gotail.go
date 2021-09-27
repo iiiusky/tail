@@ -9,7 +9,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/tenebris-tech/tail"
+	"github.com/iiiusky/tail"
 )
 
 func args2config() (tail.Config, int64) {

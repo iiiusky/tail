@@ -5,7 +5,7 @@ package tail
 import (
 	"os"
 
-	"github.com/tenebris-tech/tail/winfile"
+	"github.com/iiiusky/tail/winfile"
 )
 
 func OpenFile(name string) (file *os.File, err error) {
