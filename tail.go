@@ -37,10 +37,10 @@ func NewLine(text string) *Line {
 	return &Line{text, time.Now(), nil}
 }
 
-// SeekInfo represents arguments to `os.Seek`
+// SeekInfo represents arguments to `io.Seek`
 type SeekInfo struct {
 	Offset int64
-	Whence int // os.SEEK_*
+	Whence int // io.Seek*
 }
 
 type logger interface {
@@ -144,7 +144,7 @@ func (tail *Tail) Tell() (offset int64, err error) {
 	if tail.file == nil {
 		return
 	}
-	offset, err = tail.file.Seek(0, os.SEEK_CUR)
+	offset, err = tail.file.Seek(0, io.SeekCurrent)
 	if err != nil {
 		return
 	}
@@ -225,8 +225,10 @@ func (tail *Tail) readLine() (string, error) {
 }
 
 func (tail *Tail) tailFileSync() {
-	defer tail.Done()
-	defer tail.close()
+	defer func() {
+		tail.close()
+		tail.Done()
+	}()
 
 	if !tail.MustExist {
 		// deferred first open.
@@ -251,16 +253,12 @@ func (tail *Tail) tailFileSync() {
 
 	tail.openReader()
 
-	var offset int64
-	var err error
-
 	// Read line by line.
 	for {
 		// do not seek in named pipes
 		if !tail.Pipe {
 			// grab the position in case we need to back up in the event of a half-line
-			offset, err = tail.Tell()
-			if err != nil {
+			if _, err := tail.Tell(); err != nil {
 				tail.Kill(err)
 				return
 			}
@@ -296,10 +294,8 @@ func (tail *Tail) tailFileSync() {
 			}
 
 			if tail.Follow && line != "" {
-				// this has the potential to never return the last line if
-				// it's not followed by a newline; seems a fair trade here
-				err := tail.seekTo(SeekInfo{Offset: offset, Whence: 0})
-				if err != nil {
+				tail.sendLine(line)
+				if err := tail.seekEnd(); err != nil {
 					tail.Kill(err)
 					return
 				}
@@ -337,7 +333,7 @@ func (tail *Tail) tailFileSync() {
 // reopened if ReOpen is true. Truncated files are always reopened.
 func (tail *Tail) waitForChanges() error {
 	if tail.changes == nil {
-		pos, err := tail.file.Seek(0, os.SEEK_CUR)
+		pos, err := tail.file.Seek(0, io.SeekCurrent)
 		if err != nil {
 			return err
 		}
@@ -390,7 +386,7 @@ func (tail *Tail) openReader() {
 }
 
 func (tail *Tail) seekEnd() error {
-	return tail.seekTo(SeekInfo{Offset: 0, Whence: os.SEEK_END})
+	return tail.seekTo(SeekInfo{Offset: 0, Whence: io.SeekCurrent})
 }
 
 func (tail *Tail) seekTo(pos SeekInfo) error {
